@@ -15,7 +15,6 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://localhost:4000/",
   "scripts": {
     "start": "node ./web.js",
     "build": "react-scripts build",
@@ -44,6 +43,5 @@
   },
   "devDependencies": {
     "gh-pages": "^5.0.0"
-  },
-  "homepage": "https://parksangryong.github.io/todolist-last"
+  }
 }

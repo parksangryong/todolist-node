@@ -14,6 +14,7 @@ const db = mysql.createPool({
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 
+
 app.get('/todo' ,(req,res) => {
     db.query(`select * from todo_table order by date desc`, (err,data) => {
         if(!err){
