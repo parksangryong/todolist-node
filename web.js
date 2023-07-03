@@ -11,9 +11,15 @@ const db = mysql.createPool({
     port : 3306
 })
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs')
+
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
 
+app.get('/', (req,res) => {
+    res.render('index')
+})
 
 app.get('/todo' ,(req,res) => {
     db.query(`select * from todo_table order by date desc`, (err,data) => {
