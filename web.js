@@ -9,7 +9,8 @@ const db = mysql.createPool({
     password : '33123asd',
     database : 'todo',
     port : 3306
-})
+});
+
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs')
