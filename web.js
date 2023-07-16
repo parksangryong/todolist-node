@@ -325,7 +325,7 @@ app.get("/answer/:id", (req, res) => {
   console.log(req.params);
   const id = parseInt(req.params.id);
   db.query(
-    `select * from answer where board_id = '${id}' order by date desc `,
+    `select * from answer where board_id = '${id}' order by id desc `,
     (err, data) => {
       if (!err) {
         res.send(data);
