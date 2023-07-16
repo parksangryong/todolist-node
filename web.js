@@ -263,16 +263,13 @@ app.get("/title/:title", (req, res) => {
 
 app.get("/date/:date", (req, res) => {
   const w_date = req.body.w_date;
-  db.query(
-    `select * from boards where w_date like '%${w_date}%' `,
-    (err, data) => {
-      if (!err) {
-        res.send(data);
-      } else {
-        res.send("검색 값이 없습니다.");
-      }
+  db.query(`select * from boards where w_date = '${w_date}' `, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send("검색 값이 없습니다.");
     }
-  );
+  });
 });
 //게시판 날짜 검색
 
