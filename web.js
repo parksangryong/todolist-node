@@ -318,7 +318,7 @@ app.get("/answer/:id", (req, res) => {
       if (!err) {
         res.send(data);
       } else {
-        console.log(err);
+        res.send(err);
       }
     }
   );
@@ -337,9 +337,9 @@ app.post("/answer", (req, res) => {
     `insert into answer values ('${answer}', '${date}', ${board_id}, '${name}', ${id})`,
     (err, data) => {
       if (!err) {
-        console.log("post 성공");
+        res.send("post 성공");
       } else {
-        console.log(err);
+        res.send(err);
       }
     }
   );
@@ -354,9 +354,9 @@ app.put("/answer", (req, res) => {
     `update answer set answer= '${answer}' where id=${id}`,
     (err, data) => {
       if (!err) {
-        console.log("put 성공");
+        res.send("put 성공");
       } else {
-        console.log(err);
+        res.send(err);
       }
     }
   );
@@ -368,9 +368,9 @@ app.delete("/answer", (req, res) => {
 
   db.query(`delete from answer where id=${id}`, (err, data) => {
     if (!err) {
-      console.log("delete 성공");
+      res.send("delete 성공");
     } else {
-      console.log(err);
+      res.send(err);
     }
   });
 }); // 댓글 삭제
