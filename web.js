@@ -309,6 +309,72 @@ app.delete("/board", (req, res) => {
   });
 }); // 게시물 삭제
 
+app.get("/answer/:id", (req, res) => {
+  console.log(req.params);
+  const id = parseInt(req.params.id);
+  db.query(
+    `select * from answer where board_id = '${id}' order by date desc `,
+    (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
+//댓글 보기(게시판 번호조회)
+
+app.post("/answer", (req, res) => {
+  console.log(req.body);
+  const id = parseInt(req.body.id);
+  const board_id = parseInt(req.body.board_id);
+  const answer = req.body.answer;
+  const date = req.body.date;
+  const name = req.body.name;
+
+  db.query(
+    `insert into answer values ('${answer}', '${date}', ${board_id}, '${name}', ${id})`,
+    (err, data) => {
+      if (!err) {
+        console.log("post 성공");
+      } else {
+        console.log(err);
+      }
+    }
+  );
+}); // 댓글 등록
+
+app.put("/answer", (req, res) => {
+  console.log(req.body);
+  const id = parseInt(req.body.id);
+  const answer = req.body.answer;
+
+  db.query(
+    `update answer set answer= '${answer}' where id=${id}`,
+    (err, data) => {
+      if (!err) {
+        console.log("put 성공");
+      } else {
+        console.log(err);
+      }
+    }
+  );
+}); // 댓글 수정
+
+app.delete("/answer", (req, res) => {
+  console.log(req.body);
+  const id = parseInt(req.body.id);
+
+  db.query(`delete from answer where id=${id}`, (err, data) => {
+    if (!err) {
+      console.log("delete 성공");
+    } else {
+      console.log(err);
+    }
+  });
+}); // 댓글 삭제
+
 app.listen(PORT, () => {
   console.log(`https://localhost:${PORT}`);
 });
