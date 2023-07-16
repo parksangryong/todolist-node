@@ -247,7 +247,7 @@ app.get("/name/:name", (req, res) => {
 
 app.get("/title/:title", (req, res) => {
   console.log(req.params);
-  const title = req.params.title;
+  const title = req.params.search;
   db.query(
     `select * from boards where title like '%${title}%' `,
     (err, data) => {
@@ -262,7 +262,7 @@ app.get("/title/:title", (req, res) => {
 //게시판 제목 검색
 
 app.get("/date/:date", (req, res) => {
-  const w_date = req.body.w_date;
+  const w_date = req.body.search;
   db.query(`select * from boards where w_date = '${w_date}' `, (err, data) => {
     if (!err) {
       res.send(data);
