@@ -309,6 +309,18 @@ app.delete("/board", (req, res) => {
   });
 }); // 게시물 삭제
 
+app.get("/allanswer", (req, res) => {
+  console.log(req.params);
+  db.query(`select * from answer order by date desc `, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  });
+});
+//댓글 보기(게시판 번호조회)
+
 app.get("/answer/:id", (req, res) => {
   console.log(req.params);
   const id = parseInt(req.params.id);
