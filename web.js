@@ -248,7 +248,7 @@ app.get("/name/:name", (req, res) => {
 app.get("/num/:id", (req, res) => {
   console.log(req.params);
   const id = parseInt(req.params.id);
-  db.query(`select * from boards where id = ${id} `, (err, data) => {
+  db.query(`select * from boards where id = '${id}' `, (err, data) => {
     if (!err) {
       res.send(data);
     } else {
