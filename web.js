@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const PORT = 4000;
+const cors = require("cors");
 var mysql = require("mysql");
 
 const db = mysql.createPool({
@@ -13,6 +14,7 @@ const db = mysql.createPool({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("test open");
