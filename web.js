@@ -245,6 +245,31 @@ app.get("/name/:name", (req, res) => {
 });
 //자기 게시판 전체 조회
 
+app.get("/title/:title", (req, res) => {
+  console.log(req.params);
+  const title = req.params.title;
+  db.query(`select * from boards where title = '${title}' `, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send("검색 값이 없습니다.");
+    }
+  });
+});
+//게시판 제목 검색
+
+app.get("/date/:date", (req, res) => {
+  const w_date = req.body.w_date;
+  db.query(`select * from boards where w_date = '${w_date}' `, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send("검색 값이 없습니다.");
+    }
+  });
+});
+//게시판 날짜 검색
+
 app.get("/num/:id", (req, res) => {
   console.log(req.params);
   const id = parseInt(req.params.id);
