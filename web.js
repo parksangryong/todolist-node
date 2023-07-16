@@ -311,7 +311,7 @@ app.delete("/board", (req, res) => {
 
 app.get("/allanswer", (req, res) => {
   console.log(req.params);
-  db.query(`select * from answer order by date desc `, (err, data) => {
+  db.query(`select * from answer order by id desc `, (err, data) => {
     if (!err) {
       res.send(data);
     } else {
