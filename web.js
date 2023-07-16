@@ -4,21 +4,18 @@ const PORT = 4000;
 var mysql = require("mysql");
 
 const db = mysql.createPool({
-  host: "localhost",
+  host: "svc.sel4.cloudtype.app",
   user: "root",
   password: "33123asd",
-  database: "todo",
-  port: 3306,
+  database: "testdb",
+  port: 31341,
 });
-
-app.set("views", __dirname + "/views");
-app.set("view engine", "ejs");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.send("test open");
 });
 
 app.get("/todo", (req, res) => {
