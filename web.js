@@ -197,7 +197,7 @@ app.put("/id", (req, res) => {
   const password = req.body.password;
 
   db.query(
-    `update users set username= '${username}', password='${password}' where id='${id}'`,
+    `update users set username= '${username}', password='${password}',id='${id}' where id='${id}'`,
     (err, data) => {
       if (!err) {
         console.log("put 성공");
