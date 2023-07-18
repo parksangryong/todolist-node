@@ -245,6 +245,22 @@ app.get("/name/:name", (req, res) => {
 });
 //자기 게시판 전체 조회
 
+app.get("/area/:area", (req, res) => {
+  console.log(req.params);
+  const area = req.params.area;
+  db.query(
+    `SELECT b.id, b.title, b.content, b.user_id, b.w_date FROM boards b JOIN users u ON b.user_id = u.id WHERE u.username = '${area}' `,
+    (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        res.send("검색 값이 없습니다.");
+      }
+    }
+  );
+});
+//게시판 소속 검색
+
 app.get("/title/:title", (req, res) => {
   console.log(req.params);
   const title = req.params.title;
