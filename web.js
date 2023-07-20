@@ -464,7 +464,7 @@ app.post("/bookid", (req, res) => {
   const password = req.body.password;
 
   db.query(
-    `insert into book_users values ('${username}', '${email}', '${password}')`,
+    `insert into book_users (username, email, password) values ('${username}', '${email}', '${password}')`,
     (err, results) => {
       if (err) {
         res.json({ success: true, message: "중복됩니다." });
