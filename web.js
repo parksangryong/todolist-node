@@ -485,7 +485,7 @@ app.put("/bookid", (req, res) => {
     `update book_users set email= '${email}', password='${password}' where username='${username}'`,
     (err, data) => {
       if (!err) {
-        res.send("put 성공");
+        res.send("회원정보 수정 완료");
       } else {
         res.send(err);
       }
@@ -501,13 +501,93 @@ app.delete("/bookid", (req, res) => {
     `delete from book_users where username='${username}' `,
     (err, data) => {
       if (!err) {
-        res.send("delete 성공");
+        res.send(username + "의 회원정보 삭제");
       } else {
         res.send(err);
       }
     }
   );
 }); // 회원탈퇴
+
+app.get("/book", (req, res) => {
+  db.query(`select * from book order by id desc`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  });
+});
+//책 목록 조회
+
+app.get("/bookinfo/:id", (req, res) => {
+  console.log(req.params);
+  const id = parseInt(req.params.id);
+
+  db.query(`select * from book where id =${id}`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  });
+});
+//책 상세보기
+
+app.post("/book", (req, res) => {
+  console.log(req.body);
+  const title = req.body.title;
+  const author = req.body.author;
+  const description = req.body.description;
+  const price = parseInt(req.body.description);
+  const image_url = req.body.image_url;
+  const seller_id = req.body.seller_id;
+
+  db.query(
+    `INSERT INTO books (title, author, description, price, image_url, seller_id) VALUES ('${title}', '${author}', '${description}', ${price}, '${image_url}', '${seller_id}');`,
+    (err, results) => {
+      if (err) {
+        res.send(err);
+      } else if (!err) {
+        res.send("등록 성공");
+      }
+    }
+  );
+}); // 책 등록
+
+app.put("/book", (req, res) => {
+  console.log(req.body);
+  const id = parseInt(req.body.id);
+  const title = req.body.title;
+  const author = req.body.author;
+  const description = req.body.description;
+  const price = parseInt(req.body.description);
+  const image_url = req.body.image_url;
+
+  db.query(
+    `update book set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}' where id=${id}`,
+    (err, data) => {
+      if (!err) {
+        res.send("put 성공");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+}); // 책 내용 수정
+
+app.delete("/book", (req, res) => {
+  console.log(req.body);
+  const id = parseInt(req.body.id);
+
+  db.query(`delete from book where id=${id} `, (err, data) => {
+    if (!err) {
+      res.send("delete 성공");
+    } else {
+      res.send(err);
+    }
+  });
+}); // 책 삭제
 
 app.listen(PORT, () => {
   console.log(`https://localhost:${PORT}`);
