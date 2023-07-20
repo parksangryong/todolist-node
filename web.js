@@ -485,7 +485,7 @@ app.put("/bookid", (req, res) => {
     `update book_users set email= '${email}', password='${password}' where username='${username}'`,
     (err, data) => {
       if (!err) {
-        console.log("put 성공");
+        res.send("put 성공");
       } else {
         res.send(err);
       }
@@ -501,7 +501,7 @@ app.delete("/bookid", (req, res) => {
     `delete from book_users where username='${username}' `,
     (err, data) => {
       if (!err) {
-        console.log("delete 성공");
+        res.send("delete 성공");
       } else {
         res.send(err);
       }
