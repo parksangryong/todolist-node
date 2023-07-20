@@ -510,7 +510,7 @@ app.delete("/bookid", (req, res) => {
 }); // 회원탈퇴
 
 app.get("/book", (req, res) => {
-  db.query(`select * from book order by id desc`, (err, data) => {
+  db.query(`select * from books order by id desc`, (err, data) => {
     if (!err) {
       res.send(data);
     } else {
@@ -524,7 +524,7 @@ app.get("/bookinfo/:id", (req, res) => {
   console.log(req.params);
   const id = parseInt(req.params.id);
 
-  db.query(`select * from book where id =${id}`, (err, data) => {
+  db.query(`select * from books where id =${id}`, (err, data) => {
     if (!err) {
       res.send(data);
     } else {
@@ -565,7 +565,7 @@ app.put("/book", (req, res) => {
   const image_url = req.body.image_url;
 
   db.query(
-    `update book set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}' where id=${id}`,
+    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}' where id=${id}`,
     (err, data) => {
       if (!err) {
         res.send("put 성공");
@@ -580,7 +580,7 @@ app.delete("/book", (req, res) => {
   console.log(req.body);
   const id = parseInt(req.body.id);
 
-  db.query(`delete from book where id=${id} `, (err, data) => {
+  db.query(`delete from books where id=${id} `, (err, data) => {
     if (!err) {
       res.send("delete 성공");
     } else {
