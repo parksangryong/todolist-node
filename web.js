@@ -140,6 +140,8 @@ app.delete("/todoall", (req, res) => {
   });
 });
 
+// board -------------------------------------------------------------------------
+
 app.get("/id", (req, res) => {
   db.query(`select * from users`, (err, data) => {
     if (!err) {
@@ -431,6 +433,81 @@ app.delete("/answer", (req, res) => {
     }
   });
 }); // 댓글 삭제
+
+// book ---------------------------------------------------------------------------
+
+app.post("/booklogin", (req, res) => {
+  const { username, password } = req.body;
+
+  db.query(
+    `SELECT * FROM book_users WHERE username = '${username}' AND password = '${password}'`,
+    (err, data) => {
+      if (err) throw err;
+
+      if (data.length > 0) {
+        res.json({ success: true, message: "로그인 성공", data: data });
+      } else {
+        res.json({
+          success: false,
+          message: "아이디 또는 비밀번호가 올바르지 않습니다.",
+        });
+      }
+    }
+  );
+});
+//로그인하기
+
+app.post("/bookid", (req, res) => {
+  console.log(req.body);
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+
+  db.query(
+    `insert into book_users values ('${username}', '${email}', '${password}')`,
+    (err, results) => {
+      if (err) {
+        res.json({ success: true, message: "중복됩니다." });
+      } else if (!err) {
+        res.json({ success: false, message: "회원가입 성공" });
+      }
+    }
+  );
+}); // 회원가입
+
+app.put("/bookid", (req, res) => {
+  console.log(req.body);
+  const email = req.body.email;
+  const username = req.body.username;
+  const password = req.body.password;
+
+  db.query(
+    `update book_users set email= '${email}', password='${password}' where username='${username}'`,
+    (err, data) => {
+      if (!err) {
+        console.log("put 성공");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+}); // 회원정보 수정
+
+app.delete("/bookid", (req, res) => {
+  console.log(req.body);
+  const username = req.body.username;
+
+  db.query(
+    `delete from book_users where username='${username}' `,
+    (err, data) => {
+      if (!err) {
+        console.log("delete 성공");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+}); // 회원탈퇴
 
 app.listen(PORT, () => {
   console.log(`https://localhost:${PORT}`);
