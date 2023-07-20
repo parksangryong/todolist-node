@@ -542,9 +542,10 @@ app.post("/book", (req, res) => {
   const price = parseInt(req.body.description);
   const image_url = req.body.image_url;
   const seller_id = req.body.seller_id;
+  const inven = parseInt(req.params.inven);
 
   db.query(
-    `INSERT INTO books (title, author, description, price, image_url, seller_id) VALUES ('${title}', '${author}', '${description}', ${price}, '${image_url}', '${seller_id}');`,
+    `INSERT INTO books (title, author, description, price, image_url, seller_id, inven) VALUES ('${title}', '${author}', '${description}', ${price}, '${image_url}', '${seller_id}', ${inven});`,
     (err, results) => {
       if (err) {
         res.send(err);
@@ -563,9 +564,10 @@ app.put("/book", (req, res) => {
   const description = req.body.description;
   const price = parseInt(req.body.description);
   const image_url = req.body.image_url;
+  const inven = parseInt(req.params.inven);
 
   db.query(
-    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}' where id=${id}`,
+    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}', inven='${inven}' where id=${id}`,
     (err, data) => {
       if (!err) {
         res.send("put 성공");
