@@ -17,7 +17,6 @@ const db = mysql.createPool({
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
   res.send("test open");
@@ -537,17 +536,20 @@ app.get("/bookinfo/:id", (req, res) => {
 });
 //책 상세보기
 
-// 파일 업로드를 위한 multer 설정
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "uploads")); // 파일이 저장될 절대 경로 설정
+    cb(null, path.join(__dirname, "uploads"));
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname); // 파일명 설정
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage });
+// 파일 업로드를 위한 multer 설정
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// 정적 파일 제공 (이미지 파일이 저장된 디렉토리를 public 폴더로 가정)
 
 app.post("/book", upload.single("file"), (req, res) => {
   const { title, author, description, price, seller_id, inven } = req.body;
