@@ -565,7 +565,7 @@ app.post("/book", upload.single("file"), (req, res) => {
     return res.status(400).json({ error: "파일이 없습니다." });
   }
 
-  const image_url = `/uploads/${req.file.path}`;
+  const image_url = req.file.path;
 
   // Prepared Statement 사용하여 SQL 쿼리 작성
   const sql =
