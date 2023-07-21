@@ -536,6 +536,8 @@ app.get("/bookinfo/:id", (req, res) => {
 });
 //책 상세보기
 
+app.use(express.static("public"));
+
 const storage = multer.diskStorage({
   destination: "./public/uploads",
   filename: function (req, file, cb) {
@@ -546,7 +548,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 // 파일 업로드를 위한 multer 설정
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+//app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // 정적 파일 제공 (이미지 파일이 저장된 디렉토리를 public 폴더로 가정)
 
 app.post("/book", upload.single("file"), (req, res) => {
