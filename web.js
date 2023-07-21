@@ -536,10 +536,10 @@ app.get("/bookinfo/:id", (req, res) => {
 });
 //책 상세보기
 
-app.use(express.static("public"));
+app.use(express.static("/uploads"));
 
 const storage = multer.diskStorage({
-  destination: "./public/uploads",
+  destination: "./uploads",
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
