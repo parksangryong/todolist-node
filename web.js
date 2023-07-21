@@ -620,7 +620,7 @@ app.put("/bookimg", upload.single("file"), (req, res) => {
   const description = req.body.description;
   const price = parseInt(req.body.description);
   const image_url = `https://port-0-todolist-node-kvmh2mljl31rz6.sel4.cloudtype.app/${req.file.path}`;
-  const inven = parseInt(req.params.inven);
+  const inven = parseInt(req.body.inven);
 
   if (!req.file) {
     return res.status(400).json({ error: "파일이 없습니다." });
@@ -645,7 +645,7 @@ app.put("/book", (req, res) => {
   const author = req.body.author;
   const description = req.body.description;
   const price = parseInt(req.body.description);
-  const inven = parseInt(req.params.inven);
+  const inven = parseInt(req.body.inven);
 
   db.query(
     `update books set title= '${title}', author='${author}',description='${description}', price=${price}, inven=${inven} where id=${id}`,
