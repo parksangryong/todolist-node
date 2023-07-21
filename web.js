@@ -609,15 +609,19 @@ app.post("/book", upload.single("file"), (req, res) => {
   );
 }); // 책 등록
 
-app.put("/book", (req, res) => {
+app.put("/bookimg", upload.single("file"), (req, res) => {
   console.log(req.body);
   const id = parseInt(req.body.id);
   const title = req.body.title;
   const author = req.body.author;
   const description = req.body.description;
   const price = parseInt(req.body.description);
-  const image_url = req.body.image_url;
+  const image_url = `https://port-0-todolist-node-kvmh2mljl31rz6.sel4.cloudtype.app/${req.file.path}`;
   const inven = parseInt(req.params.inven);
+
+  if (!req.file) {
+    return res.status(400).json({ error: "파일이 없습니다." });
+  }
 
   db.query(
     `update books set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}', inven='${inven}' where id=${id}`,
@@ -630,6 +634,27 @@ app.put("/book", (req, res) => {
     }
   );
 }); // 책 내용 수정
+
+app.put("/book", (req, res) => {
+  console.log(req.body);
+  const id = parseInt(req.body.id);
+  const title = req.body.title;
+  const author = req.body.author;
+  const description = req.body.description;
+  const price = parseInt(req.body.description);
+  const inven = parseInt(req.params.inven);
+
+  db.query(
+    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, inven='${inven}' where id=${id}`,
+    (err, data) => {
+      if (!err) {
+        res.send("put 성공");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+}); // 책 내용 수정(이미지x)
 
 app.delete("/book", (req, res) => {
   console.log(req.body);
