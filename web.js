@@ -527,13 +527,16 @@ app.get("/bookinfo/:id", (req, res) => {
   console.log(req.params);
   const id = parseInt(req.params.id);
 
-  db.query(`select * from books where seller_id =${id}`, (err, data) => {
-    if (!err) {
-      res.send(data);
-    } else {
-      res.send(err);
+  db.query(
+    `select * from books where seller_id =${id} order by id desc`,
+    (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        res.send(err);
+      }
     }
-  });
+  );
 });
 //책 상세보기
 
