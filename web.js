@@ -538,7 +538,7 @@ app.get("/bookinfo/:id", (req, res) => {
 // 파일 업로드를 위한 multer 설정
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // 파일이 저장될 경로 설정
+    cb(null, path.join(__dirname, "uploads")); // 파일이 저장될 절대 경로 설정
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname); // 파일명 설정
@@ -548,13 +548,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.post("/book", upload.single("file"), (req, res) => {
-  console.log(req.body);
-  const title = req.body.title;
-  const author = req.body.author;
-  const description = req.body.description;
-  const price = parseInt(req.body.description);
-  const seller_id = req.body.seller_id;
-  const inven = parseInt(req.params.inven);
+  const { title, author, description, price, seller_id, inven } = req.body;
+
+  // 데이터 파싱
+  const parsedPrice = parseInt(price);
+  const parsedSellerId = parseInt(seller_id);
+  const parsedInven = parseInt(inven);
 
   if (!req.file) {
     return res.status(400).json({ error: "파일이 없습니다." });
@@ -562,14 +561,28 @@ app.post("/book", upload.single("file"), (req, res) => {
 
   const image_url = req.file.path;
 
+  // Prepared Statement 사용하여 SQL 쿼리 작성
+  const sql =
+    "INSERT INTO books (title, author, description, price, image_url, seller_id, inven) VALUES (?, ?, ?, ?, ?, ?, ?)";
   db.query(
-    `INSERT INTO books (title, author, description, price, image_url, seller_id, inven) VALUES ('${title}', '${author}', '${description}', ${price}, '${image_url}', '${seller_id}', ${inven});`,
+    sql,
+    [
+      title,
+      author,
+      description,
+      parsedPrice,
+      image_url,
+      parsedSellerId,
+      parsedInven,
+    ],
     (err, results) => {
       if (err) {
-        res.send(err);
-      } else if (!err) {
-        res.send("등록 성공");
+        console.error("MySQL 쿼리 에러:", err);
+        return res.status(500).json({ error: "책 등록에 실패하였습니다." });
       }
+
+      console.log("책 등록 성공");
+      return res.json({ message: "책 등록 성공" });
     }
   );
 }); // 책 등록
