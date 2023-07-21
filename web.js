@@ -3,6 +3,7 @@ const app = express();
 const PORT = 4000;
 const cors = require("cors");
 const multer = require("multer");
+const path = require("path");
 var mysql = require("mysql");
 
 const db = mysql.createPool({
