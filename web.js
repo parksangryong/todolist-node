@@ -539,7 +539,9 @@ app.get("/bookinfo/:id", (req, res) => {
 //app.use(express.static("/uploads"));
 
 const storage = multer.diskStorage({
-  destination: "./uploads",
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "uploads"));
+  },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
@@ -548,7 +550,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 // 파일 업로드를 위한 multer 설정
 
-app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // 정적 파일 제공 (이미지 파일이 저장된 디렉토리를 public 폴더로 가정)
 
 app.post("/book", upload.single("file"), (req, res) => {
@@ -563,7 +565,7 @@ app.post("/book", upload.single("file"), (req, res) => {
     return res.status(400).json({ error: "파일이 없습니다." });
   }
 
-  const image_url = req.file.path;
+  const image_url = `/uploads/${req.file.path}`;
 
   // Prepared Statement 사용하여 SQL 쿼리 작성
   const sql =
