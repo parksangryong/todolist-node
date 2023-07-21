@@ -3,8 +3,8 @@ const app = express();
 const PORT = 4000;
 const cors = require("cors");
 const multer = require("multer");
-const path = require("path");
 const fs = require("fs");
+const path = require("path");
 var mysql = require("mysql");
 
 const db = mysql.createPool({
@@ -540,9 +540,7 @@ app.get("/bookinfo/:id", (req, res) => {
 //app.use(express.static("/uploads"));
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "uploads"));
-  },
+  destination: "./uploads",
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
@@ -551,35 +549,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 // 파일 업로드를 위한 multer 설정
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-// 정적 파일 제공 (이미지 파일이 저장된 디렉토리를 public 폴더로 가정)
-
-app.post("/book", upload.single("file"), (req, res) => {
-  const title = req.body.title;
-  const author = req.body.author;
-  const description = req.body.description;
-  const price = parseInt(req.body.description);
-  const seller_id = parseInt(req.body.seller_id);
-  const inven = parseInt(req.body.inven);
-  const image_url = req.file.path; // 이미지 파일 객체
-
-  if (!image_url) {
-    return res.status(400).json({ error: "파일이 없습니다." });
-  }
-
-  connection.query(
-    `INSERT INTO books (title, author, description, price, image_url, seller_id, inven) VALUES (?, ?, ?, ?, ?, ?, ?);`,
-    [title, author, description, price, image_url, seller_id, inven],
-    (err, results) => {
-      if (err) {
-        res.send(err);
-      } else {
-        res.json({ message: "등록 성공" });
-      }
-    }
-  );
-});
-
+const imagesDir = path.join(__dirname, "uploads");
 app.get("/images", (req, res) => {
   fs.readdir(imagesDir, (err, files) => {
     if (err) {
@@ -594,6 +564,49 @@ app.get("/images", (req, res) => {
     res.json(imageUrls); // 이미지 파일 경로를 클라이언트에 전달
   });
 });
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// 정적 파일 제공 (이미지 파일이 저장된 디렉토리를 public 폴더로 가정)
+
+app.post("/book", upload.single("file"), (req, res) => {
+  const { title, author, description, price, seller_id, inven } = req.body;
+
+  // 데이터 파싱
+  const parsedPrice = parseInt(price);
+  const parsedSellerId = parseInt(seller_id);
+  const parsedInven = parseInt(inven);
+
+  if (!req.file) {
+    return res.status(400).json({ error: "파일이 없습니다." });
+  }
+
+  const image_url = req.file.path;
+
+  // Prepared Statement 사용하여 SQL 쿼리 작성
+  const sql =
+    "INSERT INTO books (title, author, description, price, image_url, seller_id, inven) VALUES (?, ?, ?, ?, ?, ?, ?)";
+  db.query(
+    sql,
+    [
+      title,
+      author,
+      description,
+      parsedPrice,
+      image_url,
+      parsedSellerId,
+      parsedInven,
+    ],
+    (err, results) => {
+      if (err) {
+        console.error("MySQL 쿼리 에러:", err);
+        return res.status(500).json({ error: "책 등록에 실패하였습니다." });
+      }
+
+      console.log("책 등록 성공");
+      return res.json({ message: "책 등록 성공" });
+    }
+  );
+}); // 책 등록
 
 app.put("/book", (req, res) => {
   console.log(req.body);
