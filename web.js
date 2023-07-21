@@ -534,15 +534,32 @@ app.get("/bookinfo/:id", (req, res) => {
 });
 //책 상세보기
 
-app.post("/book", (req, res) => {
+// 파일 업로드를 위한 multer 설정
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // 파일이 저장될 경로 설정
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname); // 파일명 설정
+  },
+});
+
+const upload = multer({ storage });
+
+app.post("/book", upload.single("file"), (req, res) => {
   console.log(req.body);
   const title = req.body.title;
   const author = req.body.author;
   const description = req.body.description;
   const price = parseInt(req.body.description);
-  const image_url = req.body.image_url;
   const seller_id = req.body.seller_id;
   const inven = parseInt(req.params.inven);
+
+  if (!req.file) {
+    return res.status(400).json({ error: "파일이 없습니다." });
+  }
+
+  const image_url = req.file.path;
 
   db.query(
     `INSERT INTO books (title, author, description, price, image_url, seller_id, inven) VALUES ('${title}', '${author}', '${description}', ${price}, '${image_url}', '${seller_id}', ${inven});`,
