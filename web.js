@@ -550,6 +550,7 @@ const upload = multer({ storage });
 // 파일 업로드를 위한 multer 설정
 
 const imagesDir = path.join(__dirname, "uploads");
+
 app.get("/images", (req, res) => {
   fs.readdir(imagesDir, (err, files) => {
     if (err) {
@@ -580,7 +581,7 @@ app.post("/book", upload.single("file"), (req, res) => {
     return res.status(400).json({ error: "파일이 없습니다." });
   }
 
-  const image_url = req.file.path;
+  const image_url = `https://port-0-todolist-node-kvmh2mljl31rz6.sel4.cloudtype.app/${req.file.path}`;
 
   // Prepared Statement 사용하여 SQL 쿼리 작성
   const sql =
