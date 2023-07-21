@@ -627,7 +627,7 @@ app.put("/bookimg", upload.single("file"), (req, res) => {
   }
 
   db.query(
-    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}', inven='${inven}' where id=${id}`,
+    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}', inven=${inven} where id=${id}`,
     (err, data) => {
       if (!err) {
         res.send("put 성공");
@@ -648,7 +648,7 @@ app.put("/book", (req, res) => {
   const inven = parseInt(req.params.inven);
 
   db.query(
-    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, inven='${inven}' where id=${id}`,
+    `update books set title= '${title}', author='${author}',description='${description}', price=${price}, inven=${inven} where id=${id}`,
     (err, data) => {
       if (!err) {
         res.send("put 성공");
