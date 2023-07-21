@@ -651,7 +651,7 @@ app.put("/book", (req, res) => {
     `update books set title= '${title}', author='${author}',description='${description}', price=${price}, inven=${inven} where id=${id}`,
     (err, data) => {
       if (!err) {
-        res.send("put 성공");
+        res.send("수정 성공");
       } else {
         res.send(err);
       }
@@ -663,38 +663,11 @@ app.delete("/book", (req, res) => {
   console.log(req.body);
   const id = parseInt(req.body.id);
 
-  // 데이터베이스에서 책 정보 조회
-  db.query(`SELECT * FROM books WHERE id=${id}`, (err, data) => {
-    if (err) {
-      res.status(500).send(err);
-      return;
-    }
-
-    // 책 정보가 존재하는 경우
-    if (data.length > 0) {
-      // 책 삭제
-      db.query(`DELETE FROM books WHERE id=${id}`, (err, result) => {
-        if (err) {
-          res.status(500).send(err);
-        } else {
-          // 이미지 파일 삭제
-          const imageFileName = data[0].image_url;
-          const imagePath = path.join(imagesDir, imageFileName);
-
-          fs.unlink(imagePath, (err) => {
-            if (err) {
-              console.error("Error deleting image:", err);
-            } else {
-              console.log("Image deleted successfully.");
-            }
-          });
-
-          res.send("delete 성공");
-        }
-      });
+  db.query(`DELETE FROM books WHERE id=${id}`, (err, data) => {
+    if (!err) {
+      res.send("삭제 성공");
     } else {
-      // 책 정보가 없는 경우
-      res.status(404).send("책 정보를 찾을 수 없습니다.");
+      res.send(err);
     }
   });
 }); // 책 삭제
