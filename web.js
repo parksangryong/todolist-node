@@ -618,7 +618,7 @@ app.put("/bookimg", upload.single("file"), (req, res) => {
   const title = req.body.title;
   const author = req.body.author;
   const description = req.body.description;
-  const price = parseInt(req.body.description);
+  const price = parseInt(req.body.price);
   const image_url = `https://port-0-todolist-node-kvmh2mljl31rz6.sel4.cloudtype.app/${req.file.path}`;
   const inven = parseInt(req.body.inven);
 
@@ -630,7 +630,7 @@ app.put("/bookimg", upload.single("file"), (req, res) => {
     `update books set title= '${title}', author='${author}',description='${description}', price=${price}, image_url='${image_url}', inven=${inven} where id=${id}`,
     (err, data) => {
       if (!err) {
-        res.send("put 성공");
+        res.send("수정 성공");
       } else {
         res.send(err);
       }
@@ -644,7 +644,7 @@ app.put("/book", (req, res) => {
   const title = req.body.title;
   const author = req.body.author;
   const description = req.body.description;
-  const price = parseInt(req.body.description);
+  const price = parseInt(req.body.price);
   const inven = parseInt(req.body.inven);
 
   db.query(
