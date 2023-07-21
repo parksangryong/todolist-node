@@ -537,9 +537,7 @@ app.get("/bookinfo/:id", (req, res) => {
 //책 상세보기
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "uploads"));
-  },
+  destination: "./public/uploads",
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
   },
