@@ -745,13 +745,16 @@ app.delete("/cart", (req, res) => {
 
 app.get("/review/:id", (req, res) => {
   const id = parseInt(req.params.id);
-  db.query(`SELECT * FROM reviews where book_id = ${id};`, (err, data) => {
-    if (!err) {
-      res.send(data);
-    } else {
-      res.send(err);
+  db.query(
+    `SELECT a.id, a.user_id, a.book_id, a.rating, a.comment, b.username FROM reviews a join book_users b on a.user_id = b.id where book_id = ${id};`,
+    (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        res.send(err);
+      }
     }
-  });
+  );
 }); // 리뷰 조회
 
 app.post("/review", (req, res) => {
