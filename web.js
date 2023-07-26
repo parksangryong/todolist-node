@@ -523,6 +523,18 @@ app.get("/book", (req, res) => {
 });
 //책 목록 조회
 
+app.get("/bookDetail/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  db.query(`select * from books where id=${id}`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  });
+});
+//책 목록 조회
+
 app.get("/bookinfo/:id", (req, res) => {
   console.log(req.params);
   const id = parseInt(req.params.id);
@@ -538,7 +550,7 @@ app.get("/bookinfo/:id", (req, res) => {
     }
   );
 });
-//책 상세보기
+//자신의 등록 책 보기
 
 //app.use(express.static("/uploads"));
 
