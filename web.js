@@ -696,7 +696,7 @@ app.get("/cart/:id", (req, res) => {
       }
     }
   );
-});
+}); // 장바구니 조회
 
 app.post("/cart", (req, res) => {
   const user_id = parseInt(req.body.user_id);
@@ -707,13 +707,13 @@ app.post("/cart", (req, res) => {
     `insert into cart_items (user_id, book_id, quantity) values (${user_id}, ${book_id}, ${quantity})`,
     (err, data) => {
       if (!err) {
-        res.send("post 성공");
+        res.send("장바구니에 담기 성공");
       } else {
         res.send(err);
       }
     }
   );
-});
+}); // 장바구니 넣기
 
 app.put("/cart", (req, res) => {
   const id = parseInt(req.body.id);
@@ -721,6 +721,64 @@ app.put("/cart", (req, res) => {
 
   db.query(
     `update cart_items set quantity=${quantity} where id=${id}`,
+    (err, data) => {
+      if (!err) {
+        res.send("수량 수정");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+}); // 장바구니 수량 변경
+
+app.delete("/cart", (req, res) => {
+  const id = parseInt(req.body.id);
+
+  db.query(`DELETE FROM cart_items WHERE id=${id}`, (err, data) => {
+    if (!err) {
+      res.send("장바구니에서 삭제");
+    } else {
+      res.send(err);
+    }
+  });
+}); // 장바구니에서 삭제
+
+app.get("/review/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+  db.query(`SELECT * FROM reviews where book_id = ${id};`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  });
+}); // 리뷰 조회
+
+app.post("/review", (req, res) => {
+  const user_id = parseInt(req.body.user_id);
+  const book_id = parseInt(req.body.book_id);
+  const rating = parseFloat(req.body.rating);
+  const comment = req.body.comment;
+
+  db.query(
+    `insert into reviews (user_id, book_id, rating, comment) values (${user_id}, ${book_id}, ${rating}, '${comment}')`,
+    (err, data) => {
+      if (!err) {
+        res.send("리뷰 쓰기 성공");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+}); // 리뷰쓰기
+
+app.put("/review", (req, res) => {
+  const id = parseInt(req.body.id);
+  const rating = parseFloat(req.body.rating);
+  const comment = req.body.comment;
+
+  db.query(
+    `update reviews set rating=${rating}, comment='${comment}' where id=${id}`,
     (err, data) => {
       if (!err) {
         res.send("수정 성공");
@@ -731,7 +789,7 @@ app.put("/cart", (req, res) => {
   );
 });
 
-app.delete("/cart", (req, res) => {
+app.delete("/review", (req, res) => {
   const id = parseInt(req.body.id);
 
   db.query(`DELETE FROM cart_items WHERE id=${id}`, (err, data) => {
