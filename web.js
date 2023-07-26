@@ -672,6 +672,65 @@ app.delete("/book", (req, res) => {
   });
 }); // 책 삭제
 
+app.get("/cart", (req, res) => {
+  const id = parseInt(req.params.id);
+  db.query(
+    `SELECT a.id, a.user_id, a.book_id, a.quantity, b.title, b.author, b.price, b.image_url, b.inven FROM cart_items a join books b on a.user_id = b.seller_id where a.user_id = ${id};`,
+    (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        res.send(err);
+      }
+    }
+  );
+});
+
+app.post("/cart", (req, res) => {
+  const user_id = parseInt(req.body.user_id);
+  const book_id = parseInt(req.body.book_id);
+  const quantity = parseInt(req.body.quantity);
+
+  db.query(
+    `insert into cart_items values (${user_id}, ${book_id}, ${quantity})`,
+    (err, data) => {
+      if (!err) {
+        res.send("post 성공");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+});
+
+app.put("/cart", (req, res) => {
+  const id = parseInt(req.body.id);
+  const quantity = parseInt(req.body.quantity);
+
+  db.query(
+    `update cart_items set quantity=${quantity} where id=${id}`,
+    (err, data) => {
+      if (!err) {
+        res.send("수정 성공");
+      } else {
+        res.send(err);
+      }
+    }
+  );
+});
+
+app.delete("/cart", (req, res) => {
+  const id = parseInt(req.body.id);
+
+  db.query(`DELETE FROM cart_items WHERE id=${id}`, (err, data) => {
+    if (!err) {
+      res.send("삭제 성공");
+    } else {
+      res.send(err);
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`https://localhost:${PORT}`);
 });
