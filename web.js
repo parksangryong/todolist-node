@@ -792,7 +792,7 @@ app.put("/review", (req, res) => {
 app.delete("/review", (req, res) => {
   const id = parseInt(req.body.id);
 
-  db.query(`DELETE FROM cart_items WHERE id=${id}`, (err, data) => {
+  db.query(`DELETE FROM reviews WHERE id=${id}`, (err, data) => {
     if (!err) {
       res.send("삭제 성공");
     } else {
