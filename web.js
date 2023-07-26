@@ -692,7 +692,7 @@ app.post("/cart", (req, res) => {
   const quantity = parseInt(req.body.quantity);
 
   db.query(
-    `insert into cart_items ('user_id', 'book_id', 'quantity') values (${user_id}, ${book_id}, ${quantity})`,
+    `insert into cart_items (user_id, book_id, quantity) values (${user_id}, ${book_id}, ${quantity})`,
     (err, data) => {
       if (!err) {
         res.send("post 성공");
