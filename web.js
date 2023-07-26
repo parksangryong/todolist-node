@@ -675,7 +675,7 @@ app.delete("/book", (req, res) => {
 app.get("/cart/:id", (req, res) => {
   const id = parseInt(req.params.id);
   db.query(
-    `SELECT a.id, a.user_id, a.book_id, a.quantity, b.title, b.author, b.price, b.image_url, b.inven FROM cart_items a join books b on a.user_id = b.seller_id where a.user_id = ${id};`,
+    `SELECT a.id, a.user_id, a.book_id, a.quantity, b.title, b.author, b.price, b.image_url, b.inven FROM cart_items a join books b on a.book_id = b.id where a.user_id = ${id};`,
     (err, data) => {
       if (!err) {
         res.send(data);
