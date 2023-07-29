@@ -804,6 +804,19 @@ app.delete("/review", (req, res) => {
   });
 });
 
+app.get("/popbook", (req, res) => {
+  db.query(
+    "SELECT b.id, b.title, b.author, b.price, b.inven, b.image_url, AVG(a.rating) AS avg_score FROM reviews a JOIN books b ON a.book_id = b.id GROUP BY b.id, b.title, b.author, b.price, b.inven, b.image_url order by avg_score desc;",
+    (err, data) => {
+      if (!err) {
+        res.send(data);
+      } else {
+        res.send(err);
+      }
+    }
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`https://localhost:${PORT}`);
 });
